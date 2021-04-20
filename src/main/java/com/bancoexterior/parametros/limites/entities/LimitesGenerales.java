@@ -1,5 +1,6 @@
 package com.bancoexterior.parametros.limites.entities;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -27,27 +28,27 @@ public class LimitesGenerales {
 	
 	@NotEmpty(message = "no puede ser vacio")
 	@Column(name="monto_min", nullable = false)
-	private Double montoMin;
+	private BigDecimal montoMin;
 	
 	@NotEmpty(message = "no puede ser vacio")
 	@Column(name="monto_max", nullable = false)
-	private Double montoMax;
+	private BigDecimal montoMax;
 	
 	@NotEmpty(message = "no puede ser vacio")
 	@Column(name="monto_tope", nullable = false)
-	private Double montoTope;
+	private BigDecimal montoTope;
 	
 	@NotEmpty(message = "no puede ser vacio")
 	@Column(name="monto_mensual", nullable = false)
-	private Double montoMensual;
+	private BigDecimal montoMensual;
 	
 	@NotEmpty(message = "no puede ser vacio")
 	@Column(name="monto_diario", nullable = false)
-	private Double montoDiario;
+	private BigDecimal montoDiario;
 	
 	@NotEmpty(message = "no puede ser vacio")
 	@Column(name="monto_banco", nullable = false)
-	private Double montoBanco;
+	private BigDecimal montoBanco;
 	
 	@NotEmpty(message = "no puede ser vacio")
 	@Column(name = "cod_usuario", nullable = false)

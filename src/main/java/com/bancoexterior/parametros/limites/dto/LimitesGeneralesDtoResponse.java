@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.bancoexterior.parametros.limites.response.Resultado;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
@@ -15,6 +16,7 @@ public class LimitesGeneralesDtoResponse implements Serializable{
 	
 	private Resultado resultado;
 	
+	@JsonProperty("limitesGenerales")
 	private List<LimitesGeneralesDto> listLimitesGeneralesDto;
 	
 	

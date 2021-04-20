@@ -10,7 +10,7 @@ public class Codigos {
 		public static final String C0000 = "0000";
 		public static final String C0001 = "0001";
 		
-		//entrada moneda
+		//entrada limites
 		public static final String CDE1000 = "1000";
 		public static final String CDE1001 = "1001";
 		public static final String CDE1002 = "1002";
@@ -22,9 +22,13 @@ public class Codigos {
 		public static final String CDE1008 = "1008";
 		
 		
-		//entrada tasa
+		//entrada limites
 		public static final String CDE1009 = "1009";
 		public static final String CDE1010 = "1010";
+		public static final String CDE1011 = "1011";
+		public static final String CDE1012 = "1012";
+		public static final String CDE1013 = "1013";
+		public static final String CDE1014 = "1014";
 		
 		
 		////GENERAL
