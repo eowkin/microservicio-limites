@@ -2,25 +2,27 @@ package com.bancoexterior.parametros.limites.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.bancoexterior.parametros.limites.dto.LimitesGeneralesDto;
 import com.bancoexterior.parametros.limites.dto.LimitesGeneralesDtoConsulta;
 import com.bancoexterior.parametros.limites.dto.LimitesGeneralesDtoResponse;
+import com.bancoexterior.parametros.limites.dto.LimitesGeneralesDtoResponseActualizar;
 import com.bancoexterior.parametros.limites.dto.LimitesGeneralesRequestConsulta;
-import com.bancoexterior.parametros.limites.entities.LimitesGenerales;
+import com.bancoexterior.parametros.limites.dto.LimitesGeneralesRequestCrear;
+import com.bancoexterior.parametros.limites.entities.LimitesGeneralesPk;
 
 public interface ILimitesGeneralesService {
 
 	public LimitesGeneralesDtoResponse consultaLimitesGenerales(LimitesGeneralesRequestConsulta request);
 	
-	public List<LimitesGenerales> findAll();
-	
-	public List<LimitesGeneralesDto> findAllDto();
-	
 	public List<LimitesGeneralesDto> findAllDto(LimitesGeneralesDtoConsulta limitesGeneralesDtoConsulta);
 	
-	public LimitesGeneralesDtoResponse findAllDtoResponse();
+	public boolean existsById(LimitesGeneralesPk id);
 	
-	public LimitesGeneralesDtoResponse getLimitesGeneralesByParameter(String codMoneda, String tipoTransaccion, String naturaleza);
+	public LimitesGeneralesDto findById(LimitesGeneralesPk id);
 	
-	public LimitesGeneralesDtoResponse getLimitesGeneralesByAllParameter(String codMoneda, String tipoTransaccion, String naturaleza, boolean flagActivo);
+	public LimitesGeneralesDtoResponseActualizar crear(LimitesGeneralesRequestCrear request, HttpServletRequest requestHTTP);
+	
+	public LimitesGeneralesDtoResponseActualizar actualizar(LimitesGeneralesRequestCrear request, HttpServletRequest requestHTTP);
 }

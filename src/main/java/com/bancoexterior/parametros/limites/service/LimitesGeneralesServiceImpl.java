@@ -3,210 +3,136 @@ package com.bancoexterior.parametros.limites.service;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.bancoexterior.parametros.limites.config.Codigos.CodRespuesta;
 import com.bancoexterior.parametros.limites.config.Codigos.Constantes;
-
+import com.bancoexterior.parametros.limites.config.Codigos.Servicios;
 import com.bancoexterior.parametros.limites.dto.LimitesGeneralesDto;
 import com.bancoexterior.parametros.limites.dto.LimitesGeneralesDtoConsulta;
-import com.bancoexterior.parametros.limites.dto.LimitesGeneralesDtoRequestConsulta;
+import com.bancoexterior.parametros.limites.dto.LimitesGeneralesDtoRequestCrear;
 import com.bancoexterior.parametros.limites.dto.LimitesGeneralesDtoResponse;
+import com.bancoexterior.parametros.limites.dto.LimitesGeneralesDtoResponseActualizar;
 import com.bancoexterior.parametros.limites.dto.LimitesGeneralesRequestConsulta;
+import com.bancoexterior.parametros.limites.dto.LimitesGeneralesRequestCrear;
 import com.bancoexterior.parametros.limites.entities.LimitesGenerales;
+import com.bancoexterior.parametros.limites.entities.LimitesGeneralesPk;
 import com.bancoexterior.parametros.limites.repository.ILimitesGeneralesRepository;
 import com.bancoexterior.parametros.limites.response.Resultado;
+import com.bancoexterior.parametros.limites.interfase.IRegistrarAuditoriaService;
+import com.bancoexterior.parametros.limites.model.RegistrarAuditoriaRequest;
 
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+
 @Service
 public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
-
+	private static final Logger LOGGER = LogManager.getLogger(LimitesGeneralesServiceImpl.class);
+	
 	@Autowired
 	private ILimitesGeneralesRepository repo;
 	
 	@Autowired
+	private IRegistrarAuditoriaService registrarA;
+	
+	@Autowired
 	private Environment env;
 	
-	@Override
-	public List<LimitesGenerales> findAll() {
-		// TODO Auto-generated method stub
-		return repo.findAll();
-	}
 
-	@Override
-	public List<LimitesGeneralesDto> findAllDto() {
-		// TODO Auto-generated method stub
-		return repo.getAll();
-	}
-
-	@Override
-	public LimitesGeneralesDtoResponse findAllDtoResponse() {
-		LimitesGeneralesDtoResponse response = new LimitesGeneralesDtoResponse();
-		Resultado resultado = new Resultado();
-		resultado.setCodigo(CodRespuesta.C0000);
-		resultado.setDescripcion(Constantes.BLANK);
-		List<LimitesGeneralesDto> listlimitesGeneralesDto = repo.getAll();
-		
-		if(listlimitesGeneralesDto.isEmpty()) {
-			resultado.setCodigo(CodRespuesta.C0001);
-			resultado.setDescripcion(env.getProperty(Constantes.RES + resultado.getCodigo(), resultado.getCodigo()));
-		}else {
-			resultado.setDescripcion(env.getProperty(Constantes.RES + resultado.getCodigo(), resultado.getCodigo()));
-		}
-		response.setResultado(resultado);
-		response.setListLimitesGeneralesDto(listlimitesGeneralesDto);
-		return response;
-	}
-
-	@Override
-	public LimitesGeneralesDtoResponse getLimitesGeneralesByParameter(String codMoneda, String tipoTransaccion,
-			String naturaleza) {
-		LimitesGeneralesDtoResponse response = new LimitesGeneralesDtoResponse();
-		Resultado resultado = new Resultado();
-		resultado.setCodigo(CodRespuesta.C0000);
-		resultado.setDescripcion(Constantes.BLANK);
-		List<LimitesGeneralesDto> listlimitesGeneralesDto = repo.getById(codMoneda, tipoTransaccion, naturaleza);
-		
-		if(listlimitesGeneralesDto.isEmpty()) {
-			resultado.setCodigo(CodRespuesta.C0001);
-			resultado.setDescripcion(env.getProperty(Constantes.RES + resultado.getCodigo(), resultado.getCodigo()));
-		}else {
-			resultado.setDescripcion(env.getProperty(Constantes.RES + resultado.getCodigo(), resultado.getCodigo()));
-		}
-		response.setResultado(resultado);
-		response.setListLimitesGeneralesDto(listlimitesGeneralesDto);
-		return response;
-	}
-
-	@Override
-	public LimitesGeneralesDtoResponse getLimitesGeneralesByAllParameter(String codMoneda, String tipoTransaccion,
-			String naturaleza, boolean flagActivo) {
-		LimitesGeneralesDtoResponse response = new LimitesGeneralesDtoResponse();
-		Resultado resultado = new Resultado();
-		resultado.setCodigo(CodRespuesta.C0000);
-		resultado.setDescripcion(Constantes.BLANK);
-		List<LimitesGeneralesDto> listlimitesGeneralesDto = repo.getByCodMonedaAndTipoTransaccionAndNaturalezaAndFlagActivo(codMoneda, tipoTransaccion, naturaleza, flagActivo);
-		
-		if(listlimitesGeneralesDto.isEmpty()) {
-			resultado.setCodigo(CodRespuesta.C0001);
-			resultado.setDescripcion(env.getProperty(Constantes.RES + resultado.getCodigo(), resultado.getCodigo()));
-		}else {
-			resultado.setDescripcion(env.getProperty(Constantes.RES + resultado.getCodigo(), resultado.getCodigo()));
-		}
-		response.setResultado(resultado);
-		response.setListLimitesGeneralesDto(listlimitesGeneralesDto);
-		return response;
-	}
+	
+	
 
 	@Override
 	public List<LimitesGeneralesDto> findAllDto(LimitesGeneralesDtoConsulta limitesGeneralesDtoConsulta) {
 		List<LimitesGeneralesDto> limitesGeneralesDto = null;
-		log.info("findAllDto");
-		log.info("limitesGeneralesDtoConsulta: "+limitesGeneralesDtoConsulta);
-		log.info("limitesGeneralesDtoConsulta.getCodMoneda(): "+limitesGeneralesDtoConsulta.getCodMoneda());
-		log.info("limitesGeneralesDtoConsulta.getTipoTransaccion(): "+limitesGeneralesDtoConsulta.getTipoTransaccion());
-		log.info("limitesGeneralesDtoConsulta.getNaturaleza(): "+limitesGeneralesDtoConsulta.getNaturaleza());
-		log.info("limitesGeneralesDtoConsulta.getFlagActivo(): "+limitesGeneralesDtoConsulta.getFlagActivo());
+		
 		
 		//Todos los valores distintos de null
 		if (limitesGeneralesDtoConsulta.getCodMoneda() != null && limitesGeneralesDtoConsulta.getTipoTransaccion() != null 
 				&& limitesGeneralesDtoConsulta.getNaturaleza() != null && limitesGeneralesDtoConsulta.getFlagActivo() != null) {
 			limitesGeneralesDto = repo.getByCodMonedaAndTipoTransaccionAndNaturalezaAndFlagActivo(limitesGeneralesDtoConsulta.getCodMoneda(), 
 					limitesGeneralesDtoConsulta.getTipoTransaccion(), limitesGeneralesDtoConsulta.getNaturaleza(), limitesGeneralesDtoConsulta.getFlagActivo());
-			log.info(""+limitesGeneralesDto.size());
 		}
 		
 		//codMoneda
 		if (limitesGeneralesDtoConsulta.getCodMoneda() != null && limitesGeneralesDtoConsulta.getTipoTransaccion() == null 
 				&& limitesGeneralesDtoConsulta.getNaturaleza() == null && limitesGeneralesDtoConsulta.getFlagActivo() == null) {
 			limitesGeneralesDto = repo.getByCodMoneda(limitesGeneralesDtoConsulta.getCodMoneda());
-			log.info(""+limitesGeneralesDto.size());
 		}
 		
 		//codMonedaAndtipoTransaccion
 		if (limitesGeneralesDtoConsulta.getCodMoneda() != null && limitesGeneralesDtoConsulta.getTipoTransaccion() != null 
 				&& limitesGeneralesDtoConsulta.getNaturaleza() == null && limitesGeneralesDtoConsulta.getFlagActivo() == null) {
 			limitesGeneralesDto = repo.getByCodMonedaAndTipoTransaccion(limitesGeneralesDtoConsulta.getCodMoneda(), limitesGeneralesDtoConsulta.getTipoTransaccion());
-			log.info(""+limitesGeneralesDto.size());
 		}
 		
 		//codMonedaAndNaturaleza
 		if (limitesGeneralesDtoConsulta.getCodMoneda() != null && limitesGeneralesDtoConsulta.getTipoTransaccion() == null 
 				&& limitesGeneralesDtoConsulta.getNaturaleza() != null && limitesGeneralesDtoConsulta.getFlagActivo() == null) {
 			limitesGeneralesDto = repo.getByCodMonedaAndNaturaleza(limitesGeneralesDtoConsulta.getCodMoneda(), limitesGeneralesDtoConsulta.getNaturaleza());
-			log.info(""+limitesGeneralesDto.size());
 		}
 		
 		//codMonedaAndFlagActivo
 		if (limitesGeneralesDtoConsulta.getCodMoneda() != null && limitesGeneralesDtoConsulta.getTipoTransaccion() == null 
 				&& limitesGeneralesDtoConsulta.getNaturaleza() == null && limitesGeneralesDtoConsulta.getFlagActivo() != null) {
 			limitesGeneralesDto = repo.getByCodMonedaAndFlagActivo(limitesGeneralesDtoConsulta.getCodMoneda(), limitesGeneralesDtoConsulta.getFlagActivo());
-			log.info(""+limitesGeneralesDto.size());
 		}
 		
 		//codMonedaAndTipoTransaccionAndNaturaleza
 		if (limitesGeneralesDtoConsulta.getCodMoneda() != null && limitesGeneralesDtoConsulta.getTipoTransaccion() != null 
 				&& limitesGeneralesDtoConsulta.getNaturaleza() != null && limitesGeneralesDtoConsulta.getFlagActivo() == null) {
 			limitesGeneralesDto = repo.getById(limitesGeneralesDtoConsulta.getCodMoneda(), limitesGeneralesDtoConsulta.getTipoTransaccion(), limitesGeneralesDtoConsulta.getNaturaleza());
-			log.info(""+limitesGeneralesDto.size());
 		}
 		
 		//codMOnedaAndNaturalezaAndFlagActivo
 		if (limitesGeneralesDtoConsulta.getCodMoneda() != null && limitesGeneralesDtoConsulta.getTipoTransaccion() == null 
 				&& limitesGeneralesDtoConsulta.getNaturaleza() != null && limitesGeneralesDtoConsulta.getFlagActivo() != null) {
 			limitesGeneralesDto = repo.getByCodMonedaAndNaturalezaAndFlagActivo(limitesGeneralesDtoConsulta.getCodMoneda(), limitesGeneralesDtoConsulta.getNaturaleza(), limitesGeneralesDtoConsulta.getFlagActivo());
-			log.info(""+limitesGeneralesDto.size());
 		}
 		
 		//codMOnedaAndTipoTransaccionAndFlagActivo
 		if (limitesGeneralesDtoConsulta.getCodMoneda() != null && limitesGeneralesDtoConsulta.getTipoTransaccion() != null 
 				&& limitesGeneralesDtoConsulta.getNaturaleza() == null && limitesGeneralesDtoConsulta.getFlagActivo() != null) {
 			limitesGeneralesDto = repo.getByCodMonedaAndTipoTransaccionAndFlagActivo(limitesGeneralesDtoConsulta.getCodMoneda(), limitesGeneralesDtoConsulta.getTipoTransaccion(), limitesGeneralesDtoConsulta.getFlagActivo());
-			log.info(""+limitesGeneralesDto.size());
 		}
 		
 		//tipoTransaccion
 		if (limitesGeneralesDtoConsulta.getCodMoneda() == null && limitesGeneralesDtoConsulta.getTipoTransaccion() != null 
 				&& limitesGeneralesDtoConsulta.getNaturaleza() == null && limitesGeneralesDtoConsulta.getFlagActivo() == null) {
 			limitesGeneralesDto = repo.getByTipoTrasaccion(limitesGeneralesDtoConsulta.getTipoTransaccion());
-			log.info(""+limitesGeneralesDto.size());
 		}
 		
 		//tipoTransaccionAndNaturaleza
 		if (limitesGeneralesDtoConsulta.getCodMoneda() == null && limitesGeneralesDtoConsulta.getTipoTransaccion() != null 
 				&& limitesGeneralesDtoConsulta.getNaturaleza() != null && limitesGeneralesDtoConsulta.getFlagActivo() == null) {
 			limitesGeneralesDto = repo.getByTipoTrasaccionAndNaturaleza(limitesGeneralesDtoConsulta.getTipoTransaccion(), limitesGeneralesDtoConsulta.getNaturaleza());
-			log.info(""+limitesGeneralesDto.size());
 		}
 		
 		//tipoTransaccionAndFlagActivo
 		if (limitesGeneralesDtoConsulta.getCodMoneda() == null && limitesGeneralesDtoConsulta.getTipoTransaccion() != null 
 				&& limitesGeneralesDtoConsulta.getNaturaleza() == null && limitesGeneralesDtoConsulta.getFlagActivo() != null) {
 			limitesGeneralesDto = repo.getByTipoTransaccionAndFlagActivo(limitesGeneralesDtoConsulta.getTipoTransaccion(), limitesGeneralesDtoConsulta.getFlagActivo());
-			log.info(""+limitesGeneralesDto.size());
 		}
 		
 		//tipoTransaccionAndNaturalezAndFlagActivo
 		if (limitesGeneralesDtoConsulta.getCodMoneda() == null && limitesGeneralesDtoConsulta.getTipoTransaccion() != null 
 				&& limitesGeneralesDtoConsulta.getNaturaleza() != null && limitesGeneralesDtoConsulta.getFlagActivo() != null) {
 			limitesGeneralesDto = repo.getByTipoTrasaccionAndNaturalezaAndFlagActivo(limitesGeneralesDtoConsulta.getTipoTransaccion(), limitesGeneralesDtoConsulta.getNaturaleza(), limitesGeneralesDtoConsulta.getFlagActivo());
-			log.info(""+limitesGeneralesDto.size());
 		}
 		
 		//naturaleza
 		if (limitesGeneralesDtoConsulta.getCodMoneda() == null && limitesGeneralesDtoConsulta.getTipoTransaccion() == null 
 				&& limitesGeneralesDtoConsulta.getNaturaleza() != null && limitesGeneralesDtoConsulta.getFlagActivo() == null) {
 			limitesGeneralesDto = repo.getByNaturaleza(limitesGeneralesDtoConsulta.getNaturaleza());
-			log.info(""+limitesGeneralesDto.size());
 		}
 		
 		
@@ -214,21 +140,18 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
 		if (limitesGeneralesDtoConsulta.getCodMoneda() == null && limitesGeneralesDtoConsulta.getTipoTransaccion() == null 
 				&& limitesGeneralesDtoConsulta.getNaturaleza() != null && limitesGeneralesDtoConsulta.getFlagActivo() != null) {
 			limitesGeneralesDto = repo.getByNaturalezaAndFlagActivo(limitesGeneralesDtoConsulta.getNaturaleza(), limitesGeneralesDtoConsulta.getFlagActivo());
-			log.info(""+limitesGeneralesDto.size());
 		}
 		
 		//flagActivo
 		if (limitesGeneralesDtoConsulta.getCodMoneda() == null && limitesGeneralesDtoConsulta.getTipoTransaccion() == null 
 				&& limitesGeneralesDtoConsulta.getNaturaleza() == null && limitesGeneralesDtoConsulta.getFlagActivo() != null) {
 			limitesGeneralesDto = repo.getByFlagActivo(limitesGeneralesDtoConsulta.getFlagActivo());
-			log.info(""+limitesGeneralesDto.size());
 		}
 		
 		//all-Todos los valores null
 		if (limitesGeneralesDtoConsulta.getCodMoneda() == null && limitesGeneralesDtoConsulta.getTipoTransaccion() == null 
 			&& limitesGeneralesDtoConsulta.getNaturaleza() == null && limitesGeneralesDtoConsulta.getFlagActivo() == null) {
 			limitesGeneralesDto = repo.getAll();
-			log.info(""+limitesGeneralesDto.size());
 		}
 		
 		return limitesGeneralesDto;
@@ -238,57 +161,47 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
 	@Override
 	public LimitesGeneralesDtoResponse consultaLimitesGenerales(
 			LimitesGeneralesRequestConsulta request) {
-		log.info("\"==== INICIO Convenio 1 - LimitesGenerales Consultas ====\"");
+		LOGGER.info(Servicios.LIMITESSERVICEICONSULTAS);
 		LimitesGeneralesDtoResponse response = new LimitesGeneralesDtoResponse();
 		Resultado resultado = new Resultado();
 		String codigo = CodRespuesta.C0000;
 		String errorCM = Constantes.BLANK;
 		List<LimitesGeneralesDto> listLimitesGeneralesDto;
 		LimitesGeneralesDtoConsulta limitesGeneralesDtoConsulta = new LimitesGeneralesDtoConsulta(request);
-		LimitesGeneralesDtoRequestConsulta limitesGeneralesDtoRequestConsulta = request.getLimitesGeneralesDtoRequestConsulta();
-		log.info("codMoneda: "+limitesGeneralesDtoRequestConsulta.getCodMoneda());
-		log.info("tipoTransaccion: "+limitesGeneralesDtoRequestConsulta.getTipoTransaccion());
-		log.info("naturaleza: "+limitesGeneralesDtoRequestConsulta.getNaturaleza());
-		log.info("flagActivo: "+limitesGeneralesDtoRequestConsulta.getFlagActivo());
 		
 		try {
-			log.info("antes de llamara validarDatosConsulta");
+			
 			codigo = validaDatosConsulta(request);
-			log.info("codigo: "+codigo);
+			LOGGER.info(codigo);
 			if(codigo.equalsIgnoreCase(CodRespuesta.C0000)) {
-				log.info("codMonedaDto: "+limitesGeneralesDtoConsulta.getCodMoneda());
-				log.info("tipoTransaccionDto: "+limitesGeneralesDtoConsulta.getTipoTransaccion());
-				log.info("naturalezaDto: "+limitesGeneralesDtoConsulta.getNaturaleza());
-				log.info("flagActivoDto: "+limitesGeneralesDtoConsulta.getFlagActivo());
 				
 				//consulta BD
 				listLimitesGeneralesDto = this.findAllDto(limitesGeneralesDtoConsulta);
 				response.setListLimitesGeneralesDto(listLimitesGeneralesDto);
-				log.info("antes de llamara validaConsulta");
+				
 				//Validar Respuesta
 				resultado = validaConsulta(listLimitesGeneralesDto);
-				log.info("luego de llamara validaConsulta");
 				codigo = resultado.getCodigo();
 				errorCM = resultado.getDescripcion();
 			}
 			
 			
 		} catch (Exception e) {
-			log.error(""+e);
+			LOGGER.error(e);
 			codigo = CodRespuesta.CME6000;
 			errorCM = Constantes.EXC+e;
 		}
 		response.getResultado().setCodigo(codigo);
 		response.getResultado().setDescripcion(env.getProperty(Constantes.RES+codigo,codigo).replace(Constantes.ERROR, errorCM));
 		
-		log.info("tasaDtoResponse: "+response);
-		log.info("==== FIN Convenio 1 - Tasa Consultas ====");
+		LOGGER.info(response);
+		LOGGER.info(Servicios.LIMITESSERVICEFCONSULTAS);
 		return response;
 	}
 	
 	private String validaDatosConsulta(LimitesGeneralesRequestConsulta request) {
-		log.info("dentro de validarDatosConsulta");
-		log.info(""+request);
+		LOGGER.info("dentro de validarDatosConsulta");
+		LOGGER.info(request);
 		String codigo = CodRespuesta.C0000;
 		String codMoneda;
 		String tipoTransaccion;
@@ -307,7 +220,7 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
 		request.getLimitesGeneralesDtoRequestConsulta().setNaturaleza(naturaleza);
 		request.getLimitesGeneralesDtoRequestConsulta().setFlagActivo(flagActivo);
 		
-		log.info("antes de llamar factory");
+		
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 		Validator validator = factory.getValidator();
 		Set<ConstraintViolation<LimitesGeneralesRequestConsulta>> errores = validator.validate(request);
@@ -358,8 +271,189 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
 	    }*/
 
 	    
-	    log.info(""+resultado);
+		LOGGER.info(resultado);
 		return resultado;
+		
+	}
+	
+	/**
+     * Nombre:                 registrarAuditoriaBD
+     * Descripcion:            Registrar Auditoria en Web Service
+     *
+     * @param  req  Objeto RegistrarAuditoriaRequest
+     * @param  codigo   Codigo de respuesta
+     * @param descripcion Descripcion del resultado
+     * @version 1.0
+     * @author Wilmer Vieira
+	 * @since 02/03/21
+     */
+	private void registrarAuditoriaBD(RegistrarAuditoriaRequest registrarAu,Resultado response, String errorAdicional) {
+			
+		        registrarA.registrarAuditoria(registrarAu, response.getCodigo(),response.getDescripcion(),errorAdicional);	
+	}
+
+	@Override
+	public boolean existsById(LimitesGeneralesPk id) {
+		return repo.existsById(id);
+	}
+
+	@Override
+	public LimitesGeneralesDtoResponseActualizar crear(LimitesGeneralesRequestCrear request, HttpServletRequest requestHTTP) {
+		LOGGER.info(Servicios.LIMITESSERVICEICREAR);
+		LOGGER.info(request);
+		String microservicio = Servicios.LIMITES;
+		
+		RegistrarAuditoriaRequest reAU = null;
+		
+		reAU = new RegistrarAuditoriaRequest(request, microservicio, requestHTTP);
+		String errorM = Constantes.BLANK;
+		String codigo =  CodRespuesta.C0000;
+		
+		LimitesGenerales obj = new LimitesGenerales();
+		
+		LimitesGeneralesDtoResponseActualizar response = new LimitesGeneralesDtoResponseActualizar();
+		Resultado resultado = new Resultado();
+		resultado.setCodigo(CodRespuesta.C0000);
+		resultado.setDescripcion(env.getProperty(Constantes.RES+CodRespuesta.C0000,CodRespuesta.C0000).replace(Constantes.ERROR, Constantes.BLANK));
+		
+		try {
+			
+			LimitesGeneralesDtoRequestCrear dtoRequestCrear = request.getLimitesGeneralesDtoRequestCrear();
+			LimitesGeneralesPk id = new LimitesGeneralesPk();
+			id.setCodMoneda(dtoRequestCrear.getCodMoneda());
+			id.setTipoTransaccion(dtoRequestCrear.getTipoTransaccion());
+			id.setNaturaleza(dtoRequestCrear.getNaturaleza());
+			obj.setId(id);
+			obj.setMontoMin(dtoRequestCrear.getMontoMin());
+			obj.setMontoMax(dtoRequestCrear.getMontoMax());
+			obj.setMontoTope(dtoRequestCrear.getMontoTope());
+			obj.setMontoMensual(dtoRequestCrear.getMontoMensual());
+			obj.setMontoDiario(dtoRequestCrear.getMontoDiario());
+			obj.setMontoBanco(dtoRequestCrear.getMontoBanco());
+			obj.setCodUsuario(request.getCodUsuarioMR());
+			obj.setFlagActivo(dtoRequestCrear.getFlagActivo());
+			
+			LOGGER.info(obj);
+			obj = repo.save(obj);
+			response.setResultado(resultado);
+			
+		} catch (Exception e) {
+			LOGGER.error(e);
+			codigo = CodRespuesta.CME6001;
+			errorM = Constantes.EXC+e;
+			response.getResultado().setCodigo(CodRespuesta.CME6001);
+			response.getResultado().setDescripcion(env.getProperty(Constantes.RES+CodRespuesta.CME6001,CodRespuesta.CME6001));
+			
+		}
+		resultado.setCodigo(codigo);
+		resultado.setDescripcion(env.getProperty(Constantes.RES+codigo,codigo).replace(Constantes.ERROR, errorM));
+		
+		if(reAU != null) {
+			reAU.setIdCliente(Constantes.RIF);
+			reAU.setCedula(Constantes.CEDULA);
+			reAU.setTelefono(Constantes.TELEFONO);
+			reAU.setIdCanal(request.getCanalCM());
+			registrarAuditoriaBD(reAU, resultado, errorM);
+		}
+		
+		LOGGER.info(Servicios.LIMITESSERVICEFCREAR);
+		return response;
+		
+	}
+
+
+	@Override
+	public LimitesGeneralesDtoResponseActualizar actualizar(LimitesGeneralesRequestCrear request,
+			HttpServletRequest requestHTTP) {
+		LOGGER.info(Servicios.LIMITESSERVICEIACTUALIZAR);
+		LOGGER.info(request);
+		String microservicio = Servicios.LIMITESACTUALIZAR;
+		
+		RegistrarAuditoriaRequest reAU = null;
+		
+		reAU = new RegistrarAuditoriaRequest(request, microservicio, requestHTTP);
+		String errorM = Constantes.BLANK;
+		String codigo =  CodRespuesta.C0000;
+		
+		LimitesGenerales obj = new LimitesGenerales();
+		
+		LimitesGeneralesDtoResponseActualizar response = new LimitesGeneralesDtoResponseActualizar();
+		Resultado resultado = new Resultado();
+		resultado.setCodigo(CodRespuesta.C0000);
+		resultado.setDescripcion(env.getProperty(Constantes.RES+CodRespuesta.C0000,CodRespuesta.C0000).replace(Constantes.ERROR, Constantes.BLANK));
+		
+		try {
+			
+			LimitesGeneralesDtoRequestCrear dtoRequestCrear = request.getLimitesGeneralesDtoRequestCrear();
+			
+			LimitesGeneralesPk id = new LimitesGeneralesPk();
+			id.setCodMoneda(dtoRequestCrear.getCodMoneda());
+			id.setTipoTransaccion(dtoRequestCrear.getTipoTransaccion());
+			id.setNaturaleza(dtoRequestCrear.getNaturaleza());
+			
+			LimitesGeneralesDto limitesGeneralesDto = this.findById(id);
+			
+			obj.setId(id);
+			obj.setMontoMin(dtoRequestCrear.getMontoMin());
+			obj.setMontoMax(dtoRequestCrear.getMontoMax());
+			obj.setMontoTope(dtoRequestCrear.getMontoTope());
+			obj.setMontoMensual(dtoRequestCrear.getMontoMensual());
+			obj.setMontoDiario(dtoRequestCrear.getMontoDiario());
+			obj.setMontoBanco(dtoRequestCrear.getMontoBanco());
+			obj.setCodUsuario(request.getCodUsuarioMR());
+			obj.setFlagActivo(dtoRequestCrear.getFlagActivo());
+			obj.setFechaModificacion(limitesGeneralesDto.getFechaModificacion());
+			
+			LOGGER.info(obj);
+			obj = repo.save(obj);
+			response.setResultado(resultado);
+			
+		} catch (Exception e) {
+			LOGGER.error(e);
+			codigo = CodRespuesta.CME6001;
+			errorM = Constantes.EXC+e;
+			response.getResultado().setCodigo(CodRespuesta.CME6001);
+			response.getResultado().setDescripcion(env.getProperty(Constantes.RES+CodRespuesta.CME6001,CodRespuesta.CME6001));
+			
+		}
+		resultado.setCodigo(codigo);
+		resultado.setDescripcion(env.getProperty(Constantes.RES+codigo,codigo).replace(Constantes.ERROR, errorM));
+		
+		if(reAU != null) {
+			reAU.setIdCliente(Constantes.RIF);
+			reAU.setCedula(Constantes.CEDULA);
+			reAU.setTelefono(Constantes.TELEFONO);
+			reAU.setIdCanal(request.getCanalCM());
+			registrarAuditoriaBD(reAU, resultado, errorM);
+		}
+		
+		LOGGER.info(Servicios.LIMITESSERVICEFACTUALIZAR);
+		return response;
+	}
+
+
+	@Override
+	public LimitesGeneralesDto findById(LimitesGeneralesPk id) {
+		LimitesGenerales limitesGenerales =  repo.findById(id).orElse(null);
+		
+		if(limitesGenerales != null) {
+			LimitesGeneralesDto limitesGeneralesDto = new LimitesGeneralesDto();
+			limitesGeneralesDto.setCodMoneda(limitesGenerales.getId().getCodMoneda());
+			limitesGeneralesDto.setTipoTransaccion(limitesGenerales.getId().getTipoTransaccion());
+			limitesGeneralesDto.setNaturaleza(limitesGenerales.getId().getNaturaleza());
+			limitesGeneralesDto.setMontoMin(limitesGenerales.getMontoMin());
+			limitesGeneralesDto.setMontoMax(limitesGenerales.getMontoMax());
+			limitesGeneralesDto.setMontoTope(limitesGenerales.getMontoTope());
+			limitesGeneralesDto.setMontoMensual(limitesGenerales.getMontoMensual());
+			limitesGeneralesDto.setMontoDiario(limitesGenerales.getMontoDiario());
+			limitesGeneralesDto.setMontoBanco(limitesGenerales.getMontoBanco());
+			limitesGeneralesDto.setFlagActivo(limitesGenerales.getFlagActivo());
+			limitesGeneralesDto.setFechaModificacion(limitesGenerales.getFechaModificacion());
+			return limitesGeneralesDto;
+		}else {
+			return null;
+		}
+		
 		
 	}
 
