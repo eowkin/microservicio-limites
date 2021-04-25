@@ -18,6 +18,8 @@ public interface ILimitesGeneralesService {
 	
 	public List<LimitesGeneralesDto> findAllDto(LimitesGeneralesDtoConsulta limitesGeneralesDtoConsulta);
 	
+	public List<LimitesGeneralesDto> findAllDtoNuevo(LimitesGeneralesDtoConsulta limitesGeneralesDtoConsulta);
+	
 	public boolean existsById(LimitesGeneralesPk id);
 	
 	public LimitesGeneralesDto findById(LimitesGeneralesPk id);

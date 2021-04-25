@@ -20,6 +20,21 @@ public interface ILimitesGeneralesRepository extends JpaRepository<LimitesGenera
 			+ " where 1=1";
 	
 	
+	String queryNativo = "SELECT cod_moneda, tipo_transaccion, naturaleza, monto_min, monto_max, monto_tope, monto_mensual, monto_diario, monto_banco, cod_usuario, fecha_modificacion, flag_activo "
+			+ "FROM \"Convenio1\".\"Limites_generales\" "
+			+ "where cod_moneda= (case when ?1 = '' then cod_moneda else ?1 end) "
+			+ "and tipo_transaccion= (case when ?2 = '' then tipo_transaccion else ?2 end) "
+			+ "and naturaleza= (case when ?3 = '' then naturaleza else ?3 end) "
+			+ "and "
+			+ "case when  ?4 = 'si' then "
+			+ "	flag_activo= ?5 "
+			+ "else "
+			+ "	flag_activo = flag_activo "
+			+ "end";
+	
+	@Query(value = queryNativo, nativeQuery = true)
+	public List<LimitesGenerales> getLimitesByNuevo(String codMoneda, String tipoTransaccion, String naturaleza, String flag, boolean flagActivo);
+	
 	@Query(value = queryAll)
 	public List<LimitesGeneralesDto> getAll();
 	

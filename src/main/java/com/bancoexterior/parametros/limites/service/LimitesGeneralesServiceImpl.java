@@ -1,5 +1,6 @@
 package com.bancoexterior.parametros.limites.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -157,6 +158,57 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
 		return limitesGeneralesDto;
 	}
 	
+	@Override
+	public List<LimitesGeneralesDto> findAllDtoNuevo(LimitesGeneralesDtoConsulta limitesGeneralesDtoConsulta) {
+		
+		
+		String codMoneda = Constantes.BLANK;
+		String tipoTransaccion = Constantes.BLANK;
+		String tipoCliente = Constantes.BLANK;
+		String flag = Constantes.BLANK;
+		boolean flagActivo = false;
+		
+		if (limitesGeneralesDtoConsulta.getCodMoneda() != null) {
+			codMoneda = limitesGeneralesDtoConsulta.getCodMoneda();
+		}
+		
+		if (limitesGeneralesDtoConsulta.getTipoTransaccion() != null) {
+			tipoTransaccion = limitesGeneralesDtoConsulta.getTipoTransaccion();
+		}
+		
+		if (limitesGeneralesDtoConsulta.getNaturaleza() != null) {
+			tipoCliente = limitesGeneralesDtoConsulta.getNaturaleza();
+		}
+		
+		if (limitesGeneralesDtoConsulta.getFlagActivo() != null) {
+			flag = "si";
+			flagActivo = limitesGeneralesDtoConsulta.getFlagActivo();
+		}
+		
+		
+		List<LimitesGenerales> listLimites = repo.getLimitesByNuevo(codMoneda, tipoTransaccion, tipoCliente, flag, flagActivo);
+		List<LimitesGeneralesDto> listLimitesGeneralesDto = new ArrayList<LimitesGeneralesDto>();
+		
+		for (LimitesGenerales limitesGenerales : listLimites) {
+			LimitesGeneralesDto limitesGeneralesDto = new LimitesGeneralesDto();
+			limitesGeneralesDto.setCodMoneda(limitesGenerales.getId().getCodMoneda());
+			limitesGeneralesDto.setTipoTransaccion(limitesGenerales.getId().getTipoTransaccion());
+			limitesGeneralesDto.setNaturaleza(limitesGenerales.getId().getNaturaleza());
+			limitesGeneralesDto.setMontoMin(limitesGenerales.getMontoMin());
+			limitesGeneralesDto.setMontoMax(limitesGenerales.getMontoMax());
+			limitesGeneralesDto.setMontoTope(limitesGenerales.getMontoTope());
+			limitesGeneralesDto.setMontoMensual(limitesGenerales.getMontoMensual());
+			limitesGeneralesDto.setMontoDiario(limitesGenerales.getMontoDiario());
+			limitesGeneralesDto.setMontoBanco(limitesGenerales.getMontoBanco());
+			limitesGeneralesDto.setCodUsuario(limitesGenerales.getCodUsuario());
+			limitesGeneralesDto.setFlagActivo(limitesGenerales.getFlagActivo());
+			limitesGeneralesDto.setFechaModificacion(limitesGenerales.getFechaModificacion());
+			listLimitesGeneralesDto.add(limitesGeneralesDto);
+		}
+		
+		return listLimitesGeneralesDto;
+	}
+	
 	
 	@Override
 	public LimitesGeneralesDtoResponse consultaLimitesGenerales(
@@ -176,7 +228,8 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
 			if(codigo.equalsIgnoreCase(CodRespuesta.C0000)) {
 				
 				//consulta BD
-				listLimitesGeneralesDto = this.findAllDto(limitesGeneralesDtoConsulta);
+				//listLimitesGeneralesDto = this.findAllDto(limitesGeneralesDtoConsulta);
+				listLimitesGeneralesDto = this.findAllDtoNuevo(limitesGeneralesDtoConsulta);
 				response.setListLimitesGeneralesDto(listLimitesGeneralesDto);
 				
 				//Validar Respuesta
@@ -456,6 +509,9 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
 		
 		
 	}
+
+
+	
 
 	
 
