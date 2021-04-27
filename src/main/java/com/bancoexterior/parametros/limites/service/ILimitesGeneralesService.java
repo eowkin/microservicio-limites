@@ -16,8 +16,6 @@ public interface ILimitesGeneralesService {
 
 	public LimitesGeneralesDtoResponse consultaLimitesGenerales(LimitesGeneralesRequestConsulta request);
 	
-	public List<LimitesGeneralesDto> findAllDto(LimitesGeneralesDtoConsulta limitesGeneralesDtoConsulta);
-	
 	public List<LimitesGeneralesDto> findAllDtoNuevo(LimitesGeneralesDtoConsulta limitesGeneralesDtoConsulta);
 	
 	public boolean existsById(LimitesGeneralesPk id);

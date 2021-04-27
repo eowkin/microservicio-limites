@@ -52,111 +52,17 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
 	
 	
 
-	@Override
-	public List<LimitesGeneralesDto> findAllDto(LimitesGeneralesDtoConsulta limitesGeneralesDtoConsulta) {
-		List<LimitesGeneralesDto> limitesGeneralesDto = null;
-		
-		
-		//Todos los valores distintos de null
-		if (limitesGeneralesDtoConsulta.getCodMoneda() != null && limitesGeneralesDtoConsulta.getTipoTransaccion() != null 
-				&& limitesGeneralesDtoConsulta.getNaturaleza() != null && limitesGeneralesDtoConsulta.getFlagActivo() != null) {
-			limitesGeneralesDto = repo.getByCodMonedaAndTipoTransaccionAndNaturalezaAndFlagActivo(limitesGeneralesDtoConsulta.getCodMoneda(), 
-					limitesGeneralesDtoConsulta.getTipoTransaccion(), limitesGeneralesDtoConsulta.getNaturaleza(), limitesGeneralesDtoConsulta.getFlagActivo());
-		}
-		
-		//codMoneda
-		if (limitesGeneralesDtoConsulta.getCodMoneda() != null && limitesGeneralesDtoConsulta.getTipoTransaccion() == null 
-				&& limitesGeneralesDtoConsulta.getNaturaleza() == null && limitesGeneralesDtoConsulta.getFlagActivo() == null) {
-			limitesGeneralesDto = repo.getByCodMoneda(limitesGeneralesDtoConsulta.getCodMoneda());
-		}
-		
-		//codMonedaAndtipoTransaccion
-		if (limitesGeneralesDtoConsulta.getCodMoneda() != null && limitesGeneralesDtoConsulta.getTipoTransaccion() != null 
-				&& limitesGeneralesDtoConsulta.getNaturaleza() == null && limitesGeneralesDtoConsulta.getFlagActivo() == null) {
-			limitesGeneralesDto = repo.getByCodMonedaAndTipoTransaccion(limitesGeneralesDtoConsulta.getCodMoneda(), limitesGeneralesDtoConsulta.getTipoTransaccion());
-		}
-		
-		//codMonedaAndNaturaleza
-		if (limitesGeneralesDtoConsulta.getCodMoneda() != null && limitesGeneralesDtoConsulta.getTipoTransaccion() == null 
-				&& limitesGeneralesDtoConsulta.getNaturaleza() != null && limitesGeneralesDtoConsulta.getFlagActivo() == null) {
-			limitesGeneralesDto = repo.getByCodMonedaAndNaturaleza(limitesGeneralesDtoConsulta.getCodMoneda(), limitesGeneralesDtoConsulta.getNaturaleza());
-		}
-		
-		//codMonedaAndFlagActivo
-		if (limitesGeneralesDtoConsulta.getCodMoneda() != null && limitesGeneralesDtoConsulta.getTipoTransaccion() == null 
-				&& limitesGeneralesDtoConsulta.getNaturaleza() == null && limitesGeneralesDtoConsulta.getFlagActivo() != null) {
-			limitesGeneralesDto = repo.getByCodMonedaAndFlagActivo(limitesGeneralesDtoConsulta.getCodMoneda(), limitesGeneralesDtoConsulta.getFlagActivo());
-		}
-		
-		//codMonedaAndTipoTransaccionAndNaturaleza
-		if (limitesGeneralesDtoConsulta.getCodMoneda() != null && limitesGeneralesDtoConsulta.getTipoTransaccion() != null 
-				&& limitesGeneralesDtoConsulta.getNaturaleza() != null && limitesGeneralesDtoConsulta.getFlagActivo() == null) {
-			limitesGeneralesDto = repo.getById(limitesGeneralesDtoConsulta.getCodMoneda(), limitesGeneralesDtoConsulta.getTipoTransaccion(), limitesGeneralesDtoConsulta.getNaturaleza());
-		}
-		
-		//codMOnedaAndNaturalezaAndFlagActivo
-		if (limitesGeneralesDtoConsulta.getCodMoneda() != null && limitesGeneralesDtoConsulta.getTipoTransaccion() == null 
-				&& limitesGeneralesDtoConsulta.getNaturaleza() != null && limitesGeneralesDtoConsulta.getFlagActivo() != null) {
-			limitesGeneralesDto = repo.getByCodMonedaAndNaturalezaAndFlagActivo(limitesGeneralesDtoConsulta.getCodMoneda(), limitesGeneralesDtoConsulta.getNaturaleza(), limitesGeneralesDtoConsulta.getFlagActivo());
-		}
-		
-		//codMOnedaAndTipoTransaccionAndFlagActivo
-		if (limitesGeneralesDtoConsulta.getCodMoneda() != null && limitesGeneralesDtoConsulta.getTipoTransaccion() != null 
-				&& limitesGeneralesDtoConsulta.getNaturaleza() == null && limitesGeneralesDtoConsulta.getFlagActivo() != null) {
-			limitesGeneralesDto = repo.getByCodMonedaAndTipoTransaccionAndFlagActivo(limitesGeneralesDtoConsulta.getCodMoneda(), limitesGeneralesDtoConsulta.getTipoTransaccion(), limitesGeneralesDtoConsulta.getFlagActivo());
-		}
-		
-		//tipoTransaccion
-		if (limitesGeneralesDtoConsulta.getCodMoneda() == null && limitesGeneralesDtoConsulta.getTipoTransaccion() != null 
-				&& limitesGeneralesDtoConsulta.getNaturaleza() == null && limitesGeneralesDtoConsulta.getFlagActivo() == null) {
-			limitesGeneralesDto = repo.getByTipoTrasaccion(limitesGeneralesDtoConsulta.getTipoTransaccion());
-		}
-		
-		//tipoTransaccionAndNaturaleza
-		if (limitesGeneralesDtoConsulta.getCodMoneda() == null && limitesGeneralesDtoConsulta.getTipoTransaccion() != null 
-				&& limitesGeneralesDtoConsulta.getNaturaleza() != null && limitesGeneralesDtoConsulta.getFlagActivo() == null) {
-			limitesGeneralesDto = repo.getByTipoTrasaccionAndNaturaleza(limitesGeneralesDtoConsulta.getTipoTransaccion(), limitesGeneralesDtoConsulta.getNaturaleza());
-		}
-		
-		//tipoTransaccionAndFlagActivo
-		if (limitesGeneralesDtoConsulta.getCodMoneda() == null && limitesGeneralesDtoConsulta.getTipoTransaccion() != null 
-				&& limitesGeneralesDtoConsulta.getNaturaleza() == null && limitesGeneralesDtoConsulta.getFlagActivo() != null) {
-			limitesGeneralesDto = repo.getByTipoTransaccionAndFlagActivo(limitesGeneralesDtoConsulta.getTipoTransaccion(), limitesGeneralesDtoConsulta.getFlagActivo());
-		}
-		
-		//tipoTransaccionAndNaturalezAndFlagActivo
-		if (limitesGeneralesDtoConsulta.getCodMoneda() == null && limitesGeneralesDtoConsulta.getTipoTransaccion() != null 
-				&& limitesGeneralesDtoConsulta.getNaturaleza() != null && limitesGeneralesDtoConsulta.getFlagActivo() != null) {
-			limitesGeneralesDto = repo.getByTipoTrasaccionAndNaturalezaAndFlagActivo(limitesGeneralesDtoConsulta.getTipoTransaccion(), limitesGeneralesDtoConsulta.getNaturaleza(), limitesGeneralesDtoConsulta.getFlagActivo());
-		}
-		
-		//naturaleza
-		if (limitesGeneralesDtoConsulta.getCodMoneda() == null && limitesGeneralesDtoConsulta.getTipoTransaccion() == null 
-				&& limitesGeneralesDtoConsulta.getNaturaleza() != null && limitesGeneralesDtoConsulta.getFlagActivo() == null) {
-			limitesGeneralesDto = repo.getByNaturaleza(limitesGeneralesDtoConsulta.getNaturaleza());
-		}
-		
-		
-		//naturalezaAndFlagActivo
-		if (limitesGeneralesDtoConsulta.getCodMoneda() == null && limitesGeneralesDtoConsulta.getTipoTransaccion() == null 
-				&& limitesGeneralesDtoConsulta.getNaturaleza() != null && limitesGeneralesDtoConsulta.getFlagActivo() != null) {
-			limitesGeneralesDto = repo.getByNaturalezaAndFlagActivo(limitesGeneralesDtoConsulta.getNaturaleza(), limitesGeneralesDtoConsulta.getFlagActivo());
-		}
-		
-		//flagActivo
-		if (limitesGeneralesDtoConsulta.getCodMoneda() == null && limitesGeneralesDtoConsulta.getTipoTransaccion() == null 
-				&& limitesGeneralesDtoConsulta.getNaturaleza() == null && limitesGeneralesDtoConsulta.getFlagActivo() != null) {
-			limitesGeneralesDto = repo.getByFlagActivo(limitesGeneralesDtoConsulta.getFlagActivo());
-		}
-		
-		//all-Todos los valores null
-		if (limitesGeneralesDtoConsulta.getCodMoneda() == null && limitesGeneralesDtoConsulta.getTipoTransaccion() == null 
-			&& limitesGeneralesDtoConsulta.getNaturaleza() == null && limitesGeneralesDtoConsulta.getFlagActivo() == null) {
-			limitesGeneralesDto = repo.getAll();
-		}
-		
-		return limitesGeneralesDto;
-	}
+	/**
+	 * Nombre: findAllDtoNuevo 
+	 * Descripcion: Invocar metodo para una busqueda de los limites con
+	 * los parametros enviados.
+	 *
+	 * @param limitesGeneralesDtoConsulta     Objeto tipo LimitesGeneralesDtoConsulta 
+	 * @return List<LimitesGeneralesDto>
+	 * @version 1.0
+	 * @author Eugenio Owkin
+	 * @since 12/04/21
+	 */
 	
 	@Override
 	public List<LimitesGeneralesDto> findAllDtoNuevo(LimitesGeneralesDtoConsulta limitesGeneralesDtoConsulta) {
@@ -209,7 +115,17 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
 		return listLimitesGeneralesDto;
 	}
 	
-	
+	/**
+	 * Nombre: consultaLimitesGenerales 
+	 * Descripcion: Invocar metodo para la gestion de consulta a realizar
+	 * para la busqueda de los limites con los parametros enviados.
+	 *
+	 * @param request     Objeto tipo LimitesGeneralesRequestConsulta
+	 * @return MonedaDtoResponse
+	 * @version 1.0
+	 * @author Eugenio Owkin
+	 * @since 12/04/21
+	 */
 	@Override
 	public LimitesGeneralesDtoResponse consultaLimitesGenerales(
 			LimitesGeneralesRequestConsulta request) {
@@ -251,6 +167,18 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
 		LOGGER.info(Servicios.LIMITESSERVICEFCONSULTAS);
 		return response;
 	}
+	
+	
+	/**
+     * Nombre:                  validaDatosConsulta
+     * Descripcion:             Valida datos de entrada del metodo de consulta.
+     *
+     * @param  Objeto MonedasRequest
+     * @return String  Codigo resultado de la evaluacion.
+     * @version 1.0
+     * @author Eugenio Owkin
+	 * @since 12/04/21
+	 */
 	
 	private String validaDatosConsulta(LimitesGeneralesRequestConsulta request) {
 		LOGGER.info("dentro de validarDatosConsulta");
@@ -298,12 +226,13 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
      * Nombre:                  validaConsulta
      * Descripcion:             Metodo para evaluar el resultado de la consulta de las monedas
      *
-     * @param  Objeto List<MonedasBD>
-     * @return Resultado  Objeto con la información de la evaluacion.
+     * @param listLimitesGeneralesDto   Objeto List<LimitesGeneralesDto> 
+     * @return Resultado                Objeto con la información de la evaluacion.
      * @version 1.0
-     * @author Wilmer Vieira
-	 * @since 16/03/21
-    */ 
+     * @author Eugenio Owkin
+	 * @since 12/04/21
+	 */
+    
 	
 	private Resultado validaConsulta(List<LimitesGeneralesDto> listLimitesGeneralesDto) {
 		Resultado resultado = new Resultado();
@@ -337,19 +266,44 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
      * @param  codigo   Codigo de respuesta
      * @param descripcion Descripcion del resultado
      * @version 1.0
-     * @author Wilmer Vieira
-	 * @since 02/03/21
-     */
+     * @author Eugenio Owkin
+	 * @since 12/04/21
+	 */
 	private void registrarAuditoriaBD(RegistrarAuditoriaRequest registrarAu,Resultado response, String errorAdicional) {
 			
 		        registrarA.registrarAuditoria(registrarAu, response.getCodigo(),response.getDescripcion(),errorAdicional);	
 	}
 
+	
+	/**
+	 * Nombre: existsById 
+	 * Descripcion: Invocar metodo para buscar si existe o no 
+	 * un limite por id.
+	 * @param id LimitesGeneralesPk   
+	 * @return boolean
+	 * @version 1.0
+	 * @author Eugenio Owkin
+	 * @since 12/04/21
+	 */
 	@Override
 	public boolean existsById(LimitesGeneralesPk id) {
 		return repo.existsById(id);
 	}
 
+	
+	/**
+	 * Nombre: crear 
+	 * Descripcion: Invocar metodo para crear el limite con
+	 * los parametros enviados.
+	 *
+	 * @param request     Objeto tipo LimitesGeneralesRequestCrear
+	 * @param requestHTTP Objeto tipo HttpServletRequest
+	 * @return LimitesGeneralesDtoResponseActualizar
+	 * @version 1.0
+	 * @author Eugenio Owkin
+	 * @since 12/04/21
+	 */
+	
 	@Override
 	public LimitesGeneralesDtoResponseActualizar crear(LimitesGeneralesRequestCrear request, HttpServletRequest requestHTTP) {
 		LOGGER.info(Servicios.LIMITESSERVICEICREAR);
@@ -414,12 +368,23 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
 		
 	}
 
-
+	/**
+	 * Nombre: actualizar 
+	 * Descripcion: Invocar metodo para actualizar la monedas con
+	 * los parametros enviados.
+	 *
+	 * @param request     Objeto tipo LimitesGeneralesRequestCrear
+	 * @param requestHTTP Objeto tipo HttpServletRequest
+	 * @return LimitesGeneralesDtoResponseActualizar
+	 * @version 1.0
+	 * @author Eugenio Owkin
+	 * @since 12/04/21
+	 */
 	@Override
 	public LimitesGeneralesDtoResponseActualizar actualizar(LimitesGeneralesRequestCrear request,
 			HttpServletRequest requestHTTP) {
 		LOGGER.info(Servicios.LIMITESSERVICEIACTUALIZAR);
-		LOGGER.info(request);
+		//LOGGER.info(request);
 		String microservicio = Servicios.LIMITESACTUALIZAR;
 		
 		RegistrarAuditoriaRequest reAU = null;
@@ -457,7 +422,7 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
 			obj.setFlagActivo(dtoRequestCrear.getFlagActivo());
 			obj.setFechaModificacion(limitesGeneralesDto.getFechaModificacion());
 			
-			LOGGER.info(obj);
+			//LOGGER.info(obj);
 			obj = repo.save(obj);
 			response.setResultado(resultado);
 			
@@ -485,6 +450,18 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
 	}
 
 
+	
+	/**
+	 * Nombre: findById 
+	 * Descripcion: Invocar metodo para una busqueda de un limite
+	 * por id.
+	 *
+	 * @param id LimitesGeneralesPk   
+	 * @return LimitesGeneralesDto
+	 * @version 1.0
+	 * @author Eugenio Owkin
+	 * @since 12/04/21
+	 */
 	@Override
 	public LimitesGeneralesDto findById(LimitesGeneralesPk id) {
 		LimitesGenerales limitesGenerales =  repo.findById(id).orElse(null);
