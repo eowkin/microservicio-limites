@@ -82,8 +82,8 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
 			tipoTransaccion = limitesGeneralesDtoConsulta.getTipoTransaccion();
 		}
 		
-		if (limitesGeneralesDtoConsulta.getNaturaleza() != null) {
-			tipoCliente = limitesGeneralesDtoConsulta.getNaturaleza();
+		if (limitesGeneralesDtoConsulta.getTipoCliente() != null) {
+			tipoCliente = limitesGeneralesDtoConsulta.getTipoCliente();
 		}
 		
 		if (limitesGeneralesDtoConsulta.getFlagActivo() != null) {
@@ -99,7 +99,7 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
 			LimitesGeneralesDto limitesGeneralesDto = new LimitesGeneralesDto();
 			limitesGeneralesDto.setCodMoneda(limitesGenerales.getId().getCodMoneda());
 			limitesGeneralesDto.setTipoTransaccion(limitesGenerales.getId().getTipoTransaccion());
-			limitesGeneralesDto.setNaturaleza(limitesGenerales.getId().getNaturaleza());
+			limitesGeneralesDto.setTipoCliente(limitesGenerales.getId().getTipoCliente());
 			limitesGeneralesDto.setMontoMin(limitesGenerales.getMontoMin());
 			limitesGeneralesDto.setMontoMax(limitesGenerales.getMontoMax());
 			limitesGeneralesDto.setMontoTope(limitesGenerales.getMontoTope());
@@ -186,19 +186,19 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
 		String codigo = CodRespuesta.C0000;
 		String codMoneda;
 		String tipoTransaccion;
-		String naturaleza;
+		String tipoCliente;
 		boolean flagActivo;
 		
 		
 		codMoneda = request.getLimitesGeneralesDtoRequestConsulta().getCodMoneda() == null ? "000":request.getLimitesGeneralesDtoRequestConsulta().getCodMoneda();
 		tipoTransaccion = request.getLimitesGeneralesDtoRequestConsulta().getTipoTransaccion() == null ? "000":request.getLimitesGeneralesDtoRequestConsulta().getTipoTransaccion();
-		naturaleza = request.getLimitesGeneralesDtoRequestConsulta().getNaturaleza() == null ? "000":request.getLimitesGeneralesDtoRequestConsulta().getNaturaleza();
+		tipoCliente = request.getLimitesGeneralesDtoRequestConsulta().getTipoCliente() == null ? "000":request.getLimitesGeneralesDtoRequestConsulta().getTipoCliente();
 		flagActivo = request.getLimitesGeneralesDtoRequestConsulta().getFlagActivo() == null ? Boolean.parseBoolean(Constantes.TRUE) : request.getLimitesGeneralesDtoRequestConsulta().getFlagActivo();
 		
 		
 		request.getLimitesGeneralesDtoRequestConsulta().setCodMoneda(codMoneda);
 		request.getLimitesGeneralesDtoRequestConsulta().setTipoTransaccion(tipoTransaccion);
-		request.getLimitesGeneralesDtoRequestConsulta().setNaturaleza(naturaleza);
+		request.getLimitesGeneralesDtoRequestConsulta().setTipoCliente(tipoCliente);
 		request.getLimitesGeneralesDtoRequestConsulta().setFlagActivo(flagActivo);
 		
 		
@@ -329,7 +329,7 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
 			LimitesGeneralesPk id = new LimitesGeneralesPk();
 			id.setCodMoneda(dtoRequestCrear.getCodMoneda());
 			id.setTipoTransaccion(dtoRequestCrear.getTipoTransaccion());
-			id.setNaturaleza(dtoRequestCrear.getNaturaleza());
+			id.setTipoCliente(dtoRequestCrear.getTipoCliente());
 			obj.setId(id);
 			obj.setMontoMin(dtoRequestCrear.getMontoMin());
 			obj.setMontoMax(dtoRequestCrear.getMontoMax());
@@ -407,7 +407,7 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
 			LimitesGeneralesPk id = new LimitesGeneralesPk();
 			id.setCodMoneda(dtoRequestCrear.getCodMoneda());
 			id.setTipoTransaccion(dtoRequestCrear.getTipoTransaccion());
-			id.setNaturaleza(dtoRequestCrear.getNaturaleza());
+			id.setTipoCliente(dtoRequestCrear.getTipoCliente());
 			
 			LimitesGeneralesDto limitesGeneralesDto = this.findById(id);
 			
@@ -470,7 +470,7 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
 			LimitesGeneralesDto limitesGeneralesDto = new LimitesGeneralesDto();
 			limitesGeneralesDto.setCodMoneda(limitesGenerales.getId().getCodMoneda());
 			limitesGeneralesDto.setTipoTransaccion(limitesGenerales.getId().getTipoTransaccion());
-			limitesGeneralesDto.setNaturaleza(limitesGenerales.getId().getNaturaleza());
+			limitesGeneralesDto.setTipoCliente(limitesGenerales.getId().getTipoCliente());
 			limitesGeneralesDto.setMontoMin(limitesGenerales.getMontoMin());
 			limitesGeneralesDto.setMontoMax(limitesGenerales.getMontoMax());
 			limitesGeneralesDto.setMontoTope(limitesGenerales.getMontoTope());

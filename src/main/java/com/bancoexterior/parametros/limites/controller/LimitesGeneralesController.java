@@ -145,7 +145,8 @@ public class LimitesGeneralesController {
 		LOGGER.info(Servicios.LIMITESCONTROLLERI);
 		//LOGGER.info(limitesGeneralesRequestCrear);
 		
-			    
+		limitesValidator.validarActualizar(limitesGeneralesRequestCrear, result);
+		
 		LimitesGeneralesDtoResponseActualizar response;
 		HttpStatus estatusCM;
 		

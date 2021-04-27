@@ -27,7 +27,7 @@ public class LimitesGeneralesDtoRequestConsulta implements Serializable{
 	private String tipoTransaccion;
 	
 	@JsonProperty("tipoCliente")
-	private String naturaleza;
+	private String tipoCliente;
 	
 	@JsonProperty("flagActivo")
 	@NotNull(message=CodRespuesta.CDE1007)

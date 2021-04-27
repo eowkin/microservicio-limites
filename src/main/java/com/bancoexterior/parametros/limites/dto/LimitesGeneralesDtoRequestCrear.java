@@ -34,7 +34,7 @@ public class LimitesGeneralesDtoRequestCrear implements Serializable{
 	@JsonProperty("tipoCliente")
 	@Size(min = 1, max = 1, message=CodRespuesta.CDE1006)
 	@NotEmpty(message=CodRespuesta.CDE1006)
-	private String naturaleza;
+	private String tipoCliente;
 	
 	
 	@JsonProperty("montoMin")

@@ -35,9 +35,9 @@ public class RegistrarAuditoriaRequest {
 	
 	public RegistrarAuditoriaRequest(LimitesGeneralesRequestCrear request, String microservicio,HttpServletRequest requestHTTP) {
 		
-		log.info("RegistrarAuditoriaRequest");
-		log.info("requestHTTP.getHeader(Constantes.XCLIENTIP) _"+requestHTTP.getHeader(Constantes.XCLIENTIP));
-		log.info("requestHTTP.getRemoteAddr(): "+requestHTTP.getRemoteAddr());
+		//log.info("RegistrarAuditoriaRequest");
+		//log.info("requestHTTP.getHeader(Constantes.XCLIENTIP) _"+requestHTTP.getHeader(Constantes.XCLIENTIP));
+		//log.info("requestHTTP.getRemoteAddr(): "+requestHTTP.getRemoteAddr());
 		
 		this.fecha                = Constantes.BLANK;
 		this.idCliente            = Constantes.BLANK;

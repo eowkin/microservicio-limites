@@ -20,7 +20,7 @@ public class LimitesGeneralesDtoConsulta implements Serializable{
 	private String tipoTransaccion;
 	
 	@JsonProperty("tipoCliente")
-	private String naturaleza;
+	private String tipoCliente;
 	
 	@JsonProperty("flagActivo")
 	private Boolean flagActivo;
@@ -29,7 +29,7 @@ public class LimitesGeneralesDtoConsulta implements Serializable{
 	public LimitesGeneralesDtoConsulta(LimitesGeneralesRequestConsulta limitesGenerealesRequestConsulta) {
 		this.codMoneda = limitesGenerealesRequestConsulta.getLimitesGeneralesDtoRequestConsulta().getCodMoneda();
 		this.tipoTransaccion = limitesGenerealesRequestConsulta.getLimitesGeneralesDtoRequestConsulta().getTipoTransaccion();
-		this.naturaleza = limitesGenerealesRequestConsulta.getLimitesGeneralesDtoRequestConsulta().getNaturaleza();
+		this.tipoCliente = limitesGenerealesRequestConsulta.getLimitesGeneralesDtoRequestConsulta().getTipoCliente();
 		this.flagActivo = limitesGenerealesRequestConsulta.getLimitesGeneralesDtoRequestConsulta().getFlagActivo();
 		
 	}

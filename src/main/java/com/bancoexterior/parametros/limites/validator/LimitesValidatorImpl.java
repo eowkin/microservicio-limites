@@ -47,7 +47,7 @@ public class LimitesValidatorImpl implements ILimitesValidator{
 	@Override
 	public void validarConsulta(LimitesGeneralesRequestConsulta request) {
 		String tipoTransaccion = request.getLimitesGeneralesDtoRequestConsulta().getTipoTransaccion();
-		String tipoCliente = request.getLimitesGeneralesDtoRequestConsulta().getNaturaleza();
+		String tipoCliente = request.getLimitesGeneralesDtoRequestConsulta().getTipoCliente();
 		if(tipoTransaccion != null)
 			if(!tipoTransaccion.equals("C") && !tipoTransaccion.equals("V")) {
 				throw new TipoTransaccionNotValidException(CodRespuesta.CDE1005);
@@ -73,7 +73,7 @@ public class LimitesValidatorImpl implements ILimitesValidator{
 		
 		String codMoneda = request.getLimitesGeneralesDtoRequestCrear().getCodMoneda();
 		String tipoTransaccion = request.getLimitesGeneralesDtoRequestCrear().getTipoTransaccion();
-		String tipoCliente = request.getLimitesGeneralesDtoRequestCrear().getNaturaleza();
+		String tipoCliente = request.getLimitesGeneralesDtoRequestCrear().getTipoCliente();
 		
 		if(!tipoTransaccion.equals("C") && !tipoTransaccion.equals("V")) {
 			throw new TipoTransaccionNotValidException(CodRespuesta.CDE1005);
@@ -87,7 +87,7 @@ public class LimitesValidatorImpl implements ILimitesValidator{
 	    LimitesGeneralesPk id = new LimitesGeneralesPk();
 	    id.setCodMoneda(codMoneda);
 	    id.setTipoTransaccion(tipoTransaccion);
-	    id.setNaturaleza(tipoCliente);
+	    id.setTipoCliente(tipoCliente);
 	    
 	    if(limitesService.existsById(id)) {
 	    	throw new LimitesExistException(CodRespuesta.CDE2001);
@@ -109,7 +109,7 @@ public class LimitesValidatorImpl implements ILimitesValidator{
 		
 		String codMoneda = request.getLimitesGeneralesDtoRequestCrear().getCodMoneda();
 		String tipoTransaccion = request.getLimitesGeneralesDtoRequestCrear().getTipoTransaccion();
-		String tipoCliente = request.getLimitesGeneralesDtoRequestCrear().getNaturaleza();
+		String tipoCliente = request.getLimitesGeneralesDtoRequestCrear().getTipoCliente();
 		
 		if(!tipoTransaccion.equals("C") && !tipoTransaccion.equals("V")) {
 			throw new TipoTransaccionNotValidException(CodRespuesta.CDE1005);
@@ -123,7 +123,7 @@ public class LimitesValidatorImpl implements ILimitesValidator{
 	    LimitesGeneralesPk id = new LimitesGeneralesPk();
 	    id.setCodMoneda(codMoneda);
 	    id.setTipoTransaccion(tipoTransaccion);
-	    id.setNaturaleza(tipoCliente);
+	    id.setTipoCliente(tipoCliente);
 	    
 	    if(!limitesService.existsById(id)) {
 	    	throw new LimitesNotExistException(CodRespuesta.CDE2000);
