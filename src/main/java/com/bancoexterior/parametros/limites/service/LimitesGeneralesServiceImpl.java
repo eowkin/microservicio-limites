@@ -93,7 +93,7 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
 		
 		
 		List<LimitesGenerales> listLimites = repo.getLimitesByNuevo(codMoneda, tipoTransaccion, tipoCliente, flag, flagActivo);
-		List<LimitesGeneralesDto> listLimitesGeneralesDto = new ArrayList<LimitesGeneralesDto>();
+		List<LimitesGeneralesDto> listLimitesGeneralesDto = new ArrayList<>();
 		
 		for (LimitesGenerales limitesGenerales : listLimites) {
 			LimitesGeneralesDto limitesGeneralesDto = new LimitesGeneralesDto();
@@ -144,7 +144,6 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
 			if(codigo.equalsIgnoreCase(CodRespuesta.C0000)) {
 				
 				//consulta BD
-				//listLimitesGeneralesDto = this.findAllDto(limitesGeneralesDtoConsulta);
 				listLimitesGeneralesDto = this.findAllDtoNuevo(limitesGeneralesDtoConsulta);
 				response.setListLimitesGeneralesDto(listLimitesGeneralesDto);
 				
@@ -173,7 +172,7 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
      * Nombre:                  validaDatosConsulta
      * Descripcion:             Valida datos de entrada del metodo de consulta.
      *
-     * @param  Objeto MonedasRequest
+     * @param request  Objeto LimitesGeneralesRequestConsulta 
      * @return String  Codigo resultado de la evaluacion.
      * @version 1.0
      * @author Eugenio Owkin
@@ -242,17 +241,7 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
 		if(listLimitesGeneralesDto.isEmpty()) {
 			resultado.setCodigo(CodRespuesta.C0001);
 			return resultado;
-		}
-
-		/*
-	    if(monedasBD.get(0).getCodMonedaBD().equalsIgnoreCase(Constantes.SERROR)) {
-	    	resultado.setCodigo(CodRespuesta.CME6002);
-	    	resultado.setDescripcion(monedasBD.get(0).getDescripcionBD());
-	    	 LOGGER.error(resultado);
-	    	return resultado;
-	    }*/
-
-	    
+		}	    
 		LOGGER.info(resultado);
 		return resultado;
 		
@@ -340,8 +329,8 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
 			obj.setCodUsuario(request.getCodUsuarioMR());
 			obj.setFlagActivo(dtoRequestCrear.getFlagActivo());
 			
-			LOGGER.info(obj);
-			obj = repo.save(obj);
+			
+			repo.save(obj);
 			response.setResultado(resultado);
 			
 		} catch (Exception e) {
@@ -370,7 +359,7 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
 
 	/**
 	 * Nombre: actualizar 
-	 * Descripcion: Invocar metodo para actualizar la monedas con
+	 * Descripcion: Invocar metodo para actualizar la limite con
 	 * los parametros enviados.
 	 *
 	 * @param request     Objeto tipo LimitesGeneralesRequestCrear
@@ -384,7 +373,7 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
 	public LimitesGeneralesDtoResponseActualizar actualizar(LimitesGeneralesRequestCrear request,
 			HttpServletRequest requestHTTP) {
 		LOGGER.info(Servicios.LIMITESSERVICEIACTUALIZAR);
-		//LOGGER.info(request);
+		LOGGER.info(request);
 		String microservicio = Servicios.LIMITESACTUALIZAR;
 		
 		RegistrarAuditoriaRequest reAU = null;
@@ -422,8 +411,8 @@ public class LimitesGeneralesServiceImpl implements ILimitesGeneralesService{
 			obj.setFlagActivo(dtoRequestCrear.getFlagActivo());
 			obj.setFechaModificacion(limitesGeneralesDto.getFechaModificacion());
 			
-			//LOGGER.info(obj);
-			obj = repo.save(obj);
+			
+			repo.save(obj);
 			response.setResultado(resultado);
 			
 		} catch (Exception e) {

@@ -25,7 +25,7 @@ public class LimitesGeneralesDtoResponse implements Serializable{
 	public LimitesGeneralesDtoResponse() {
 		super();
 		this.resultado = new Resultado();
-		this.listLimitesGeneralesDto = new ArrayList<LimitesGeneralesDto>(); 
+		this.listLimitesGeneralesDto = new ArrayList<>(); 
 	}
 
 

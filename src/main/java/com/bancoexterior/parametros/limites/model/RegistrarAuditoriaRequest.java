@@ -6,10 +6,10 @@ import javax.servlet.http.HttpServletRequest;
 import com.bancoexterior.parametros.limites.dto.LimitesGeneralesRequestCrear;
 import com.bancoexterior.parametros.limites.config.Codigos.Constantes;
 
-import lombok.extern.slf4j.Slf4j;
 
 
-@Slf4j
+
+
 public class RegistrarAuditoriaRequest {
 		
 	private String fecha;
@@ -35,9 +35,6 @@ public class RegistrarAuditoriaRequest {
 	
 	public RegistrarAuditoriaRequest(LimitesGeneralesRequestCrear request, String microservicio,HttpServletRequest requestHTTP) {
 		
-		//log.info("RegistrarAuditoriaRequest");
-		//log.info("requestHTTP.getHeader(Constantes.XCLIENTIP) _"+requestHTTP.getHeader(Constantes.XCLIENTIP));
-		//log.info("requestHTTP.getRemoteAddr(): "+requestHTTP.getRemoteAddr());
 		
 		this.fecha                = Constantes.BLANK;
 		this.idCliente            = Constantes.BLANK;

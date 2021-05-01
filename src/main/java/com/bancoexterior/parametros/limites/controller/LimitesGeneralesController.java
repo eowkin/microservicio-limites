@@ -26,7 +26,7 @@ import com.bancoexterior.parametros.limites.dto.LimitesGeneralesDtoResponseActua
 import com.bancoexterior.parametros.limites.dto.LimitesGeneralesRequestConsulta;
 import com.bancoexterior.parametros.limites.dto.LimitesGeneralesRequestCrear;
 import com.bancoexterior.parametros.limites.service.ILimitesGeneralesService;
-import com.bancoexterior.parametros.limites.util.Utils;
+import com.bancoexterior.parametros.limites.util.LibreriaUtils;
 import com.bancoexterior.parametros.limites.validator.ILimitesValidator;
 
 
@@ -69,7 +69,7 @@ public class LimitesGeneralesController {
 		LimitesGeneralesDtoResponse response;
 		HttpStatus estatusCM;
 		response = limitesService.consultaLimitesGenerales(limitesGeneralesRequestConsulta);
-		estatusCM = Utils.getHttpStatus(response.getResultado().getCodigo().trim());
+		estatusCM = LibreriaUtils.getHttpStatus(response.getResultado().getCodigo().trim());
 		
 		LOGGER.info(estatusCM);
 		LOGGER.info(response);
@@ -110,7 +110,7 @@ public class LimitesGeneralesController {
 		HttpStatus estatusCM;
 		
 		response = limitesService.crear(limitesGeneralesRequestCrear, requestHTTP);
-		estatusCM = Utils.getHttpStatus(response.getResultado().getCodigo().trim());
+		estatusCM = LibreriaUtils.getHttpStatus(response.getResultado().getCodigo().trim());
 		
 		LOGGER.info(estatusCM);
 		LOGGER.info(response);
@@ -143,7 +143,7 @@ public class LimitesGeneralesController {
 	public ResponseEntity<Object> actualizarLimitesGenerales(@Valid @RequestBody LimitesGeneralesRequestCrear limitesGeneralesRequestCrear, BindingResult result, 
 			HttpServletRequest requestHTTP){
 		LOGGER.info(Servicios.LIMITESCONTROLLERI);
-		//LOGGER.info(limitesGeneralesRequestCrear);
+		LOGGER.info(limitesGeneralesRequestCrear);
 		
 		limitesValidator.validarActualizar(limitesGeneralesRequestCrear, result);
 		
@@ -151,9 +151,9 @@ public class LimitesGeneralesController {
 		HttpStatus estatusCM;
 		
 		response = limitesService.actualizar(limitesGeneralesRequestCrear, requestHTTP);
-		estatusCM = Utils.getHttpStatus(response.getResultado().getCodigo().trim());
+		estatusCM = LibreriaUtils.getHttpStatus(response.getResultado().getCodigo().trim());
 		
-		//LOGGER.info(estatusCM);
+		
 		LOGGER.info(response);
 		LOGGER.info(Servicios.LIMITESCONTROLLERF);
 		if(response.getResultado().getCodigo().trim().substring(0, 1).equalsIgnoreCase(Constantes.SUBSTRING_COD_OK)) {
